@@ -35,4 +35,5 @@ t1 = threading.Thread(target=listenTCP, args=(conexao, cliente))
 t1.start()
 while True:
     conexao.send(bytes(NAME+": "+input(), "utf8"))
+    clear()
 tcp.close()

@@ -2,6 +2,10 @@
 import socket
 import time
 import threading
+import os
+
+def clear():
+    os.system('cls' if os.name=='nt' else 'clear')
 
 print("Iniciado")
 
@@ -29,6 +33,7 @@ t1.start()
 while True:
     msg = input()
     tcp.send(bytes(NAME+": "+msg, "utf8"))
+    clear()
     
 tcp.close()
 
