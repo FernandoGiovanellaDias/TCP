@@ -1,32 +1,38 @@
 #!/usr/bin/python3
 import socket
-print('Iniciado')
+import time
+import threading
 
-# ouvirá em todas as interfaces
-C_IP = ''
+print("Iniciado")
 
-# porta que irá receber
-C_PORTA = 5000
+IP = "192.168.1.114"
+NAME = "Cliente"
 
-# AF_INET = ex: IVP4 | SOCK_STREAM = ex: TCP
 tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+CLIENTE = (IP, 5000)
 
-# Recebe o IP e PORTA do cliente
-CLIENTE = (C_IP, C_PORTA)
-tcp.bind(CLIENTE)
-tcp.listen()
+tcp.connect(CLIENTE)
 
-print('Aguarda conexão do cliente ')
-# Recebe o IP e PORTA do cliente
-conexao, cliente = tcp.accept()
+def listenTCP(tcp):
+    try:
+        while True:
+            envio = tcp.recv(1024)
+            if envio != "":
+                print(envio.decode())
+    except Exception as exc:
+        print(exc)
 
-print('O cliente se conectou!')
+
+t1 = threading.Thread(target=listenTCP, args=(tcp,))
+t1.start()
+
 while True:
-    envio = conexao.recv(1024)
+    msg = input()
+    tcp.send(bytes(NAME+": "+msg, "utf8"))
     
-    if envio != '':
-        print("Recebeu a mesagem: " + envio.decode())
-    
-   
-    
-conexao.close()
+tcp.close()
+
+
+
+
+
